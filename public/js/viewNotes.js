@@ -35,7 +35,7 @@ const renderDataAsHtml = (data) => {
 
 const createCard = (note, noteId) => {
   return `
-    <div class="column is-one-quarter">
+    <div class="column is-one-third">
       <div class="card">
         <header class="card-header">
           <p class="card-header-title">${note.title}</p>
@@ -49,6 +49,9 @@ const createCard = (note, noteId) => {
             </a>
             <a href="#" class="card-footer-item" onclick="deleteNote('${noteId}')">
                 Delete
+            </a>
+            <a href="#" class="card-footer-item" onclick="archiveNote('${noteId}')">
+                Archive
             </a>
         </footer>
       </div>
@@ -81,11 +84,16 @@ const closeEditModal = () => {
 const saveEditedNote = () => {
     const noteTitle = document.querySelector("#editTitleInput").value;
     const noteText = document.querySelector("#editTextInput").value;
-    const noteId = document.querySelector("#editNoteId").value
+    const noteId = document.querySelector("#editNoteId").value;
     const noteEdits = {
         title: noteTitle,
         text: noteText,
     }
     firebase.database().ref(`users/${googleUserId}/${noteId}`).update(noteEdits);
     closeEditModal();
+}
+
+const archiveNote = () => {
+    const noteId = document.querySelector("#editNoteId").value;
+    firebase.database().ref(`users/${googleUserId}/${noteId}`).update({'archived':"true"});
 }
